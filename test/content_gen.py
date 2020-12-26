@@ -1,5 +1,5 @@
 import os, pathlib
-#
+#test
 def take_out_lst_dir(root):
     rt = root[root.rfind('/') + 1:len(root) + 1]
     return rt
