@@ -7,12 +7,12 @@ def read_dir(initial_dir):
     for root, dirs, files in os.walk(".", topdown=True):
         for name in files:
             if name == 'start.txt':
-                print(name+' ind = '+str(ind))
+                #print(name+' ind = '+str(ind))
                 dct[ind] = os.path.join(root, name)
                 ind = ind + 1
     return(dct)
 
-initial_dir = '/h902118933/wiki1.itms.su/docs/data/pages'
+initial_dir = '/home/h902118933/wiki1.itms.su/docs/data/pages'
 dct = read_dir(initial_dir)
 ind = 1
 while True:
@@ -21,8 +21,10 @@ while True:
     break
   else:
     lst_ind = path_to_file.rfind('/')
-    dir = path_to_file[0,lst_ind]
-    gen = content_gen.dir_content_gen(dir, path_to_file+'_test', 2)
-    break
-    print(dir)
+    dir = path_to_file[0:lst_ind]
+    #print(dir)
+    #print(path_to_file+'_test')
+    gen = content_gen.dir_content_gen(initial_dir+'/'+dir, initial_dir+'/'+dir+'/test.txt', 2)
+    gen.start_work()
+    #print(dir)
   ind = ind + 1

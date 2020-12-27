@@ -8,6 +8,7 @@ class dir_content_gen(object):
             2. path_to_file - файл куда писать содержание
             3. depth - тип int глубина вложенности
         '''
+        print('class_ready')
         self.initial_dir = initial_dir
         self.path_to_file = path_to_file
         self.depth = depth
@@ -73,8 +74,8 @@ class dir_content_gen(object):
         root_str = ''
         for root, dirs, files in os.walk(".", topdown=True):
             for name in files:
-                print('root is ' + root)
-                print('root_str is ' + root_str)
+                #print('root is ' + root)
+                #print('root_str is ' + root_str)
                 if root != root_str:  # than write new category in content
                     if len(root) > 1:
                         cat = self.content_cat(root)
@@ -90,7 +91,9 @@ class dir_content_gen(object):
                         str = (self.content_string(str, rt))
                         f.write(str + '\n')
                         root_str = root
-if __name__ == '__main__':
-    fileC = open(self.path_to_file,'w')
-    self.list_dir(self.initial_dir, fileC)
-    fileC.close()
+    def start_work(self):
+        print('class is working')
+        fileC = open(self.path_to_file,'w')
+        print(fileC)
+        self.list_dir(self.initial_dir, fileC)
+        fileC.close()
