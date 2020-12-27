@@ -12,7 +12,7 @@ def read_dir(initial_dir):
                 ind = ind + 1
     return(dct)
 
-initial_dir = './wiki1.itms.su/docs/data/pages'
+initial_dir = './h902118933/wiki1.itms.su/docs/data/pages'
 dct = read_dir(initial_dir)
 ind = 1
 while True:
