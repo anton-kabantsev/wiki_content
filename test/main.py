@@ -15,16 +15,30 @@ def read_dir(initial_dir):
 initial_dir = '/home/h902118933/wiki1.itms.su/docs/data/pages'
 dct = read_dir(initial_dir)
 ind = 1
+
 while True:
+  if ind == 3:
+      break
   path_to_file = dct.get(ind)
   if path_to_file == None:
     break
   else:
     lst_ind = path_to_file.rfind('/')
     dir = path_to_file[0:lst_ind]
-    #print(dir)
-    #print(path_to_file+'_test')
-    gen = content_gen.dir_content_gen(initial_dir+'/'+dir, initial_dir+'/'+dir+'/test.txt', 2)
+    if dir == '.':
+        print(dir)
+        print(initial_dir + '/')
+        dir2 = initial_dir + '/'
+        txtpath = initial_dir + '/test.txt'
+        gen = content_gen.dir_content_gen(dir2, txtpath, 2)
+        gen.start_work()
+        ind = ind + 1
+        continue
+    print(dir)
+    print(initial_dir+dir[1:len(dir)+1]+'/')
+    dir2 = initial_dir+dir[1:len(dir)+1]+'/'
+    txtpath = initial_dir+dir[1:len(dir)+1]+'/test.txt'
+    gen = content_gen.dir_content_gen(dir2, txtpath, 2)
     gen.start_work()
-    #print(dir)
-  ind = ind + 1
+    break
+    ind = ind + 1

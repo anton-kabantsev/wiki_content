@@ -36,19 +36,21 @@ class dir_content_gen(object):
 
     def content_string(self, str, root):
         '''Возвращает строку содержания с отступами'''
-        caption = self.get_caption(str)
+        print(str)
+        try:
+            caption = self.get_caption(str)
+        except:
+            caption = 'no caption here'
         # print('caption is : '+caption)
-        str = str[1:len(str) + 1]
-        str = str[1:len(str) - 4]
-        str = str.replace('/', ':')
+        #str = '.'+str[str.rfind('pages/')+len('pages'):len(str)] #приводим строку вида
+        str = str[1:len(str) + 1]   #'''отсекаем знак .'''
+        str = str[1:len(str) - 4]   #'''отсекаем расширение .txt'''
+        str = str.replace('/', ':') # '''заменяем / на :'''
+        str = '  * [[' + str + '|' + caption + ']]' # формируем строку
         ind = 1
         for lt in str:
             if lt == ':':
-                ind = ind + 1
-                str = '  * [[' + str + '|' + caption + ']]'
-        while ind > 0:
-            str = '  ' + str
-            ind = ind - 1
+                str = '  ' + str
         return str
 
     def content_cat(self, root):
@@ -74,18 +76,19 @@ class dir_content_gen(object):
         root_str = ''
         for root, dirs, files in os.walk(".", topdown=True):
             for name in files:
-                #print('root is ' + root)
-                #print('root_str is ' + root_str)
                 if root != root_str:  # than write new category in content
+                    root_str = root
                     if len(root) > 1:
                         cat = self.content_cat(root)
                         if len(cat) > 0:
                             f.write(cat + '\n')
                 if name != 'start.txt':
                     str = os.path.join(root, name)
-                    # print(str)
                     if len(root) > 1:
                         rt = self.take_out_lst_dir(root)
+                        str = (self.content_string(str, rt))
+                        f.write(str + '\n')
+                        root_str = root
                     else:
                         rt = self.take_out_lst_dir(initial_dir)
                         str = (self.content_string(str, rt))
