@@ -36,7 +36,21 @@ class dir_content_gen(object):
 
     def content_string(self, str, root):
         '''Возвращает строку содержания с отступами'''
-        print(str)
+        print(pathlib.Path.cwd())
+        '''
+        /home/h902118933/wiki1.itms.su/docs/data/pages
+/home/h902118933/wiki1.itms.su/docs/data/pages
+/home/h902118933/wiki1.itms.su/docs/data/pages
+/home/h902118933/wiki1.itms.su/docs/data/pages
+./itms_docs
+/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs/
+class_ready
+class is working
+<_io.TextIOWrapper name='/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs/test.txt' mode='w' encoding='UTF-8'>
+/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs
+/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs
+
+        '''
         try:
             caption = self.get_caption(str)
         except:
