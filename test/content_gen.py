@@ -1,22 +1,30 @@
 import os, pathlib
 
 class dir_content_gen(object):
-    def __init__(self, initial_dir, path_to_file, depth):
+    def __init__(self, initial_dir, path_to_file, depth, wiki_dir):
         ''' генератор содержания докувики
             на вход подаем:
             1. initial_dir - начальный каталог от которого будет делаться содержание
             2. path_to_file - файл куда писать содержание
             3. depth - тип int глубина вложенности
+            4. wiki_dir - каталог в котором находится корень вики, например '/home/h902118933/wiki1.itms.su/docs/data/pages'
         '''
-        print('class_ready')
         self.initial_dir = initial_dir
         self.path_to_file = path_to_file
         self.depth = depth
+        self.wiki_dir = wiki_dir
 
     def take_out_lst_dir(self, root):
         '''Возвращает последнюю директорию из пути'''
         rt = root[root.rfind('/') + 1:len(root) + 1]
         return rt
+
+    def dir_link_crt(self):
+        cwd = str(pathlib.Path.cwd())
+        if self.wiki_dir != cwd:
+            return cwd.replace(self.wiki_dir,'')
+        else:
+            return ''
 
     def get_caption(self, str):
         '''Получает заголовок отмеченный === === из текстового файла'''
@@ -34,34 +42,17 @@ class dir_content_gen(object):
         else:
             return 'no caption here'
 
-    def content_string(self, str, root):
+    def content_string(self, str):
         '''Возвращает строку содержания с отступами'''
-        print(pathlib.Path.cwd())
-        '''
-        /home/h902118933/wiki1.itms.su/docs/data/pages
-/home/h902118933/wiki1.itms.su/docs/data/pages
-/home/h902118933/wiki1.itms.su/docs/data/pages
-/home/h902118933/wiki1.itms.su/docs/data/pages
-./itms_docs
-/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs/
-class_ready
-class is working
-<_io.TextIOWrapper name='/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs/test.txt' mode='w' encoding='UTF-8'>
-/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs
-/home/h902118933/wiki1.itms.su/docs/data/pages/itms_docs
-
-        '''
         try:
             caption = self.get_caption(str)
         except:
             caption = 'no caption here'
-        # print('caption is : '+caption)
-        #str = '.'+str[str.rfind('pages/')+len('pages'):len(str)] #приводим строку вида
         str = str[1:len(str) + 1]   #'''отсекаем знак .'''
+        str = self.dir_link_crt() + str  # корркция пути относительно корневого каталога вики
         str = str[1:len(str) - 4]   #'''отсекаем расширение .txt'''
         str = str.replace('/', ':') # '''заменяем / на :'''
         str = '  * [[' + str + '|' + caption + ']]' # формируем строку
-        ind = 1
         for lt in str:
             if lt == ':':
                 str = '  ' + str
@@ -73,6 +64,8 @@ class is working
         dir = self.take_out_lst_dir(root)  # return last dir
         sp = root.count('/')  # counts number of '/'
         str = root[2:len(root) + 1]  # remove './' in the beginning of the path
+        str = self.dir_link_crt()+'/'+ str # коррекция пути относительно корневого каталога вики
+        str = str[1:len(str)+1]
         str = str.replace('/', ':')
         start_txt = pathlib.Path(root + '/start.txt')
         if start_txt.is_file():
@@ -97,20 +90,11 @@ class is working
                         if len(cat) > 0:
                             f.write(cat + '\n')
                 if name != 'start.txt':
-                    str = os.path.join(root, name)
-                    if len(root) > 1:
-                        rt = self.take_out_lst_dir(root)
-                        str = (self.content_string(str, rt))
-                        f.write(str + '\n')
-                        root_str = root
-                    else:
-                        rt = self.take_out_lst_dir(initial_dir)
-                        str = (self.content_string(str, rt))
-                        f.write(str + '\n')
-                        root_str = root
+                    str = (self.content_string(os.path.join(root, name)))
+                    f.write(str + '\n')
+                    root_str = root
+
     def start_work(self):
-        print('class is working')
         fileC = open(self.path_to_file,'w')
-        print(fileC)
         self.list_dir(self.initial_dir, fileC)
         fileC.close()
